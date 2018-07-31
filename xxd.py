@@ -33,7 +33,5 @@ def xxd(file_path):
         print('{0}: {1:<39} {2}'.format(raws,' '.join(w),''.join(ch)))
         lines=lines+1
 
-# if not os.path.exists(sys.argv[1]):
-#     print('your enter is wrong')
-#     sys.exit(1)
+
 xxd(sys.argv[1])
