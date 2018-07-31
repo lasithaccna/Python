@@ -1,30 +1,39 @@
-import os
+import sys
+import os.path
 
-f=open('l.txt','r')
+#define the xxd Function 
+def xxd(file_path):
+    f=open(file_path,'r')
+    lines=0
+    while True:
+        #read First 16 Charactors 
+        r=f.read(16)
+        x=r
+        if not r:
+            break
+        y=[]
+        #get first charactor and convert to ascii
+        for i in r:
+            y.append('%02x'%ord(i))
+        w=[]
+        #Set Two sequence Ascii Values In To One 
+        for z in range(0,len(y),2):
+            w.append(''.join((y[z:z+2])))
+        ch=[]
+        #Find The Undefined Charactors And Replace them with "."
+        for c in x:
+            undef=ord(c)
+            if undef<32:
+                ch.append('.')
+            else:
+                ch.append(c)
 
-x = os.fstat(f.fileno()).st_size
+        #Cover Raw Number to hexca         
+        raws=('%07x'%(lines*16))
+        print('{0}: {1:<39} {2}'.format(raws,' '.join(w),''.join(ch)))
+        lines=lines+1
 
-s=0
-y=[]
-z=x/16
-w=x%16
-
-for c in f:
-		y.append(c)
-
-if  w!=0:
-	z+=1
-	for l in range (1, int(z), 1):
-		if  z<1:
-			s=w
-			for i in range (0, s, 1):
-				print(y)
-			print("\n")
-		else:
-			
-			for i in range (s, s+15, 1):
-				print(y[i])
-			print("\n")
-			s+=16
-		
-
+# if not os.path.exists(sys.argv[1]):
+#     print('your enter is wrong')
+#     sys.exit(1)
+xxd(sys.argv[1])
