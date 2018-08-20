@@ -1,29 +1,28 @@
-import socket
+import socket,sys
+from threading import Thread
 
-s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+sock_s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock_s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-ip=""
-port=8000
+ip=sys.argv[1]
+port=int(sys.argv[2])
 
-s.bind((ip, port))
+sock_s.bind((ip, port))
 
-print "Server Listening On Port ", port
-s.listen(1)
+sock_s.listen(1)
 
-(client, (c_ip,port)) =s.accept()
-print "Client With: " +c_ip+ "connect to the server"
+sock, data =sock_s.accept()
 
-while 1:
-	data=client.recv(2096)
-	if not data:
-		break
-	print "client sent: ", data
-	client.send(data)
+def send_data():
+	while True:
+		server_input=raw_input()
+		sock_s.send(server_input)
 
-print "closing the client connection"
-client.close()
+def rec_data():
+	while True:
+		client_data=sock_s.recv(1024)
+		print(client_data)
 
-print "Release Socket"
-s.close() 
+thread1=Thread(target=send_data).start()
+thread2=Thread(target=rec_data).start() 
 	
