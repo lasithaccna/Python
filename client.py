@@ -1,13 +1,23 @@
-import socket
-import sys
+import socket,sys
+from threading import Thread
 
-client=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect((sys.argv[1], int(sys.argv[2])))
 
-while 1:
-	ip=raw_input()
-	client.send(ip)
-	print client.recv(2096)
+sock=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-client.close()
+ip=sys.argv[1]
+port=int(sys.argv[2])
+sock.connect((ip,port))
+def send_data():
+	while True:
+		client_input=raw_input()
+		sock.send(client_input)
+	
+
+def rec_data():
+	while True:
+		server_data=sock.recv(1024)
+		print(server_data)
+
+thread1=Thread(target=send_data).start()
+thread2=Thread(target=rec_data).start()
 
