@@ -23,4 +23,5 @@ while True:
 		sock.send(client_input)
 	except KeyboardInterrupt:
 		os._exit(1)
-		sock.close()	
+		sock.close()
+		
