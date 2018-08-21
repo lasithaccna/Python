@@ -35,3 +35,4 @@ def xxd(file_path):
 	
 	
 xxd(sys.argv[1])
+
