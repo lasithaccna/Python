@@ -20,11 +20,13 @@ def rec_data():
 		print(client_data)
 
 
-thread2=Thread(target=rec_data).start() 
+thread2=Thread(target=rec_data) 
+thread2.daemon=True
+
+thread2.start()
 while True:	
 	try:
 		server_input=raw_input()
 		sock.send(server_input)
 	except KeyboardInterrupt:
-		os._exit(1)
-		sock.close()		
+		sys.exit() 
