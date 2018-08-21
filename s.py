@@ -1,4 +1,4 @@
-import socket,sys
+import socket,sys,os
 from threading import Thread
 
 sock_s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -26,4 +26,5 @@ while True:
 		server_input=raw_input()
 		sock.send(server_input)
 	except KeyboardInterrupt:
-		sys.exit()
+		os._exit(1)
+		sock.close()		
