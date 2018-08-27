@@ -16,17 +16,29 @@ sock, data =sock_s.accept()
 
 def rec_data():
 	while True:
-		client_data=sock.recv(1024)
-		print(client_data)
+		try:	
+			client_data=sock.recv(1024)
+			print(client_data)
+		
+		except KeyboardInterrupt:
+			conn.close()
+			sys.exit()		
+		else:
+			if not server_input:
+				break		
+		
 
 
 thread2=Thread(target=rec_data) 
 thread2.daemon=True
-
 thread2.start()
+
 while True:	
 	try:
 		server_input=raw_input()
 		sock.send(server_input)
 	except KeyboardInterrupt:
-		sys.exit() 
+		conn.close()
+		sys.exit()
+			
+	
