@@ -19,12 +19,10 @@ def rec_data():
 		except KeyboardInterrupt:
 			conn.close()
 			sys.exit()		
-			
 		else:
-			if not server_data:
-				break
-
-
+			if not client_input:
+				break		
+		
 thread2=Thread(target=rec_data)
 thread2.daemon=True
 thread2.start()
@@ -37,6 +35,4 @@ while True:
 		conn.close()
 		sys.exit()		
 			
-	else:
-		if not client_input:
-			break	
+	
