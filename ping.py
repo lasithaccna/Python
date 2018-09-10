@@ -75,40 +75,40 @@ while True:
 		#ip=IP(data[TH:])
 	#packet string from tuple
     		packet = packet[0]
-    #parse ethernet header     
-    ethernet_header = packet[:14]
-    ethernet_unpack = unpack('!6s6sH' , ethernet_header)
-    ethernet_protocol = socket.ntohs(ethernet_unpack[2])
+   	 #parse ethernet header     
+	   	ethernet_header = packet[:14]
+	        ethernet_unpack = unpack('!6s6sH' , ethernet_header)
+   	        ethernet_protocol = socket.ntohs(ethernet_unpack[2])
     
     
     #Parse IP packets, IP Protocol number = 8
-    if ethernet_protocol == 8 :
+	   	if ethernet_protocol == 8 :
         
-        ip_header = packet[14:34]           
-        ip_header_unpack = unpack('!BBHHHBBH4s4s' , ip_header) 
+			 ip_header = packet[14:34]           
+       			 ip_header_unpack = unpack('!BBHHHBBH4s4s' , ip_header) 
          
-        ttl = ip_header_unpack[5]
-        protocol = ip_header_unpack[6]
-        s_addr = socket.inet_ntoa(ip_header_unpack[8]);
+	 	         ttl = ip_header_unpack[5]
+		         protocol = ip_header_unpack[6]
+       			 s_addr = socket.inet_ntoa(ip_header_unpack[8]);
         
         
-	if str(s_addr)==sys.argv[1]:
-        	#ICMP Packets
-        	if protocol == 1 :
-            		u = iph_length + 14
-            		icmph_length = 4
-            		icmp_header = packet[u:u+4] 
-            		icmph = unpack('!BBH' , icmp_header)             
-            		icmp_type = icmph[0]
-            		code = icmph[1]
-            		checksum = icmph[2]
+			 if str(s_addr)==sys.argv[1]:
+       		 	#ICMP Packets
+        			if protocol == 1 :
+            				u = iph_length + 14
+            				icmph_length = 4
+          	  			icmp_header = packet[u:u+4] 
+          	 	 		icmph = unpack('!BBH' , icmp_header)             
+          	 	 		icmp_type = icmph[0]
+          	  			code = icmph[1]
+         		   		checksum = icmph[2]
 
-			if str(icmp_type)=="0":
-				print "Reply from"+str(s_addr)+" ttl="+ttl "
+					if str(icmp_type)=="0":
+						print "Reply from"+str(s_addr)+" ttl="+ttl 
             
-	else:
-		time.sleep(5)
-		print "Request Time Out "
+		         else:
+				time.sleep(5)
+				print "Request Time Out "
 	
 		
 	
