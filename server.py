@@ -24,7 +24,7 @@ def rec_data():
 			conn.close()
 			sys.exit()		
 		else:
-			if not server_input:
+			if not client_data:
 				break		
 		
 

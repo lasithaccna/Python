@@ -20,7 +20,7 @@ def rec_data():
 			conn.close()
 			sys.exit()		
 		else:
-			if not client_input:
+			if not server_data:
 				break		
 		
 thread2=Thread(target=rec_data)
