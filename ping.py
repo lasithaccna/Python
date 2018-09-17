@@ -1,25 +1,43 @@
 from  ctypes import *
-import struct,sys
+import struct,sys,os
 import socket,time
 
 
-sock=socket.socket(socket.AF_INET,socket.SOCK_RAW,socket.IPPROTO_ICMP)
+sock=socket.socket(socket.AF_INET,socket.SOCK_RAW,1)
 sock.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
 sock.setsockopt(socket.IPPROTO_IP,socket.IP_HDRINCL,1)
 
+def checksum(source_string):
+    
+    sum = 0
+    count_to = (len(source_string) / 2) * 2
+    for count in xrange(0, count_to, 2):
+        this = ord(source_string[count + 1]) * 256 + ord(source_string[count])
+        sum = sum + this
+        sum = sum & 0xffffffff
+
+    if count_to < len(source_string):
+        sum = sum + ord(source_string[len(source_string) - 1])
+        sum = sum & 0xffffffff  
+
+    sum = (sum >> 16) + (sum & 0xffff)
+    sum = sum + (sum >> 16)
+    answer = ~sum
+    answer = answer & 0xffff
+
+    answer = answer >> 8 | (answer << 8 & 0xff00)
+
+    return answer
+
 TH=14
 ETH_P=0x0800
-try:
-    	sock1=socket.socket(socket.AF_PACKET, socket.SOCK_RAW,socket.htons(ETH_P))
-	sock1.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
-except socket.error , msg:
-    	print 'Socket could not be created. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
-    	sys.exit()
+sock1=socket.socket(socket.AF_PACKET, socket.SOCK_RAW,socket.htons(ETH_P))
+sock1.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+ip_dest=sys.argv[1]
 x=1
-while x<5:
-	
+while x<2:
+	ip_d=ip_dest
 	ip_src=socket.inet_aton(socket.gethostbyname(socket.gethostname()))
-	ip_dest=sys.argv[1]
 	i_type=8
 	i_code=0
 	i_checksum=0
@@ -30,16 +48,11 @@ while x<5:
 	i_checksum=checksum(i_header1)
 	i_header2=struct.pack('!BBHHH',i_type,i_code,i_checksum,i_id,i_seq)
 	i_packet=i_header2
-	sock.sendto(ip_packet,(ip_dest,0))
-	# receive a packet
-	
-    	try:	
-    		packet = sock1.recvfrom(65565)
-    	except KeyboardInterrupt:
-       		sys.exit()
-	
+	sock.sendto(i_packet,(ip_d,1))
+
+	packet = sock.recvfrom(1024)
     	packet = packet[0]
-   	 #parse ethernet header     
+   	     
 	ethernet_header = packet[:14]
 	ethernet_unpack = unpack('!6s6sH' , ethernet_header)
 	ethernet_protocol = socket.ntohs(ethernet_unpack[2])
@@ -59,21 +72,17 @@ while x<5:
 			 if str(s_addr)==sys.argv[1]:
        		 	#ICMP Packets
         			if protocol == 1 :
-            				u = iph_length + 14
-            				icmph_length = 4
-          	  			icmp_header = packet[u:u+4] 
+            				
+          	  			icmp_header = packet[20:28] 
           	 	 		icmph = unpack('!BBH' , icmp_header)             
           	 	 		icmp_type = icmph[0]
           	  			code = icmph[1]
          		   		checksum = icmph[2]
 
 					if str(icmp_type)=="0":
-						print "Reply from"+str(s_addr)+" ttl="+ttl 
-					elif str(icmp_code)==
+						print "Reply from"+str(s_addr)+" ttl="+ttl
             
-		         else:
-				time.sleep(5)
-				print "Request Time Out "
+		        
 	
 		
 	
