@@ -23,7 +23,7 @@ def checksum(source_string):
 
 TH=14
 ETH_P=0x0800
-sock = socket.socket(socket.AF_INET,socket.SOCK_RAW,socket.IPPROTO_ICMP)
+sock = socket.socket(socket.AF_INET,socket.SOCK_RAW,1)
 sock2 = socket.socket(socket.AF_PACKET,socket.SOCK_RAW, socket.htons(0x0800))
 sock2.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
@@ -40,7 +40,8 @@ while x<5:
 	i_seq=x
 
 	i_header1=pack('!BBHHH',i_type,i_code,i_checksum,i_id,i_seq)
-	i_checksum=checksum(i_header1)
+	f_packet=i_header1
+	i_checksum=checksum(f_packet)
 	i_header2=pack('!BBHHH',i_type,i_code,i_checksum,i_id,i_seq)
 	send_time=time.time()
  	sock.sendto(i_header2 ,(ip_d,1))
@@ -70,6 +71,8 @@ while x<5:
 	
 	if str(icmp_type)=="0":
 		print "from "+str(s_addr)+" icmp_seq="+str(x)+" ttl="+str(ttl)+" time="+str(r_time)+" ms"
+	elif str(icmp_type)=="3":
+		print "Destination Unrechable"
 	x+=1            
 	time.sleep(1)	        
 	
