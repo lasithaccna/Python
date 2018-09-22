@@ -40,24 +40,18 @@ while x<5:
 	i_seq=x
 
 	i_header1=pack('!BBHHH',i_type,i_code,i_checksum,i_id,i_seq)
-	print i_checksum
 	i_checksum=checksum(i_header1)
-	print i_checksum
 	i_header2=pack('!BBHHH',i_type,i_code,i_checksum,i_id,i_seq)
+	send_time=time.time()
  	sock.sendto(i_header2 ,(ip_d,1))
-        icmp_packet ,addr=sock.recvfrom(1024)
-        
-	sock.sendto(i_header2,(ip_d,1))
 	try:
 		packet ,addr= sock.recvfrom(1024)
+		recv_time=time.time()
+		packet2, addr2=sock2.recvfrom(1024)
 	except socket.timeout:
 		print "Time Out"
 		x+=1
 		continue
-#	print packet
-	print packet
-	packet2, addr2=sock2.recvfrom(1024)
-	#packet2=packet2[0]
 	ip_header = packet2[14:34]
        	ip_header_unpack =unpack('!BBHHHBBH4s4s'  , ip_header) 
 
@@ -72,9 +66,10 @@ while x<5:
         icmp_type = icmph[0]
         code = icmph[1]
         checksum = icmph[2]
-
+	r_time=round(((recv_time-send_time)*1000),3)
+	
 	if str(icmp_type)=="0":
-		print "Reply from "+str(icmp_type)+ "checksum "+str(checksum)+"TTL "+str(ttl)
+		print "from "+str(s_addr)+" icmp_seq="+str(x)+" ttl="+str(ttl)+" time="+str(r_time)+" ms"
 	x+=1            
 	time.sleep(1)	        
 	
