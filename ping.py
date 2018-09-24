@@ -21,9 +21,19 @@ def checksum(source_string):
     answer = answer >> 8 | (answer << 8 & 0xff00)
     return answer
 
+'''def checksum(msg):
+    s = 0
+    for i in range(0, len(msg), 2):
+        a = ord(msg[i]) 
+        b = ord(msg[i+1])
+        s = s + (a+(b << 8))
+    s = s + (s >> 16)
+    s = ~s & 0xffff
+    return s'''
+
 TH=14
 ETH_P=0x0800
-sock = socket.socket(socket.AF_INET,socket.SOCK_RAW,1)
+sock = socket.socket(socket.AF_INET,socket.SOCK_RAW,socket.IPPROTO_ICMP)
 sock2 = socket.socket(socket.AF_PACKET,socket.SOCK_RAW, socket.htons(0x0800))
 sock2.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
