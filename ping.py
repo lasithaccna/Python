@@ -27,6 +27,8 @@ ETH_P=0x0800
 sock = socket.socket(socket.AF_INET,socket.SOCK_RAW,socket.IPPROTO_ICMP)
 sock2 = socket.socket(socket.AF_PACKET,socket.SOCK_RAW, socket.htons(0x0800))
 sock2.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+sock.settimeout(5)
+sock2.settimeout(5)
 x=0
 s=0
 l=0
