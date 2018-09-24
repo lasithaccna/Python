@@ -41,7 +41,7 @@ ip_dest=sys.argv[1]
 
 
 x=1
-while x<5:
+while x<10:
 	ip_d=ip_dest
 	i_type=8
 	i_code=0
@@ -54,7 +54,10 @@ while x<5:
 	i_checksum=checksum(f_packet)
 	i_header2=pack('!BBHHH',i_type,i_code,i_checksum,i_id,i_seq)
 	send_time=time.time()
+	
  	sock.sendto(i_header2 ,(ip_d,1))
+	
+
 	try:
 		packet ,addr= sock.recvfrom(1024)
 		recv_time=time.time()
@@ -63,6 +66,8 @@ while x<5:
 		print "Time Out"
 		x+=1
 		continue
+#	x+=4
+#	time.sleep(1)
 	ip_header = packet2[14:34]
        	ip_header_unpack =unpack('!BBHHHBBH4s4s'  , ip_header) 
 
@@ -76,7 +81,7 @@ while x<5:
         
         icmp_type = icmph[0]
         code = icmph[1]
-        checksum = icmph[2]
+        icmp_checksum = icmph[2]
 	r_time=round(((recv_time-send_time)*1000),3)
 	
 	if str(icmp_type)=="0":
