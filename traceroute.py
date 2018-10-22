@@ -35,7 +35,7 @@ except socket.herror:
 	print "Unreachable Address ! \n"
 	d_name=ip_dest
 	pass
-print "Traceroute to "+str(ip_dest)+" "+d_name+" 30 hops max"
+print "Traceroute to "+str(ip_dest)+" "+str(d_name)+" 30 hops max"
 
 try:
 	
