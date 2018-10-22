@@ -35,10 +35,10 @@ except socket.herror:
 	print "Unreachable Address ! \n"
 	d_name=ip_dest
 	pass
-print("Traceroute to %s %s  ,30 hops max" %(ip_dest,d_name))
+print "Traceroute to "+str(ip_dest)+" "+d_name+" 30 hops max"
 
 try:
-	beg_time=time.time()
+	
 	while x<30:
 		
 		sock =socket.socket(socket.AF_INET, socket.SOCK_RAW ,1)
