@@ -68,7 +68,6 @@ try:
 			print str(x)+"  "+str(c_name)+" ("+str(host_add)+") "+str(r_time)+"ms"
 			sock.close
 			if c_name == d_name or addr[0] == d_name :
-				print d_name
 				sys.exit()
 		except KeyboardInterrupt:
 			sys.exit()			
