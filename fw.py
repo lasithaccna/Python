@@ -61,10 +61,10 @@ def int1():
 		block=checkip(src_addr);	
 		try:		
 			if (str(block)=="True"):
-				print "Allowed Packet"
+				print "Blocked Packet"
 				#sock1.sendto(packet,("enp0s8",0))
 			else:
-				print "Blocked Packet"
+				print "Allowed Packet"
 		except KeyboardInterrupt:
 	        	sys.exit() 
 
@@ -86,10 +86,10 @@ def int2():
 		block=checkip(src_addr);	
 		try:
 			if (str(block)=="True"):
-				print "Allowed Packet"
+				print "Blocked Packet"
 				#sock2.sendto(packet,("enp0s3",0))
 			else:
-				print "Blocked Packet"
+				print "Allowed Packet"
 		except KeyboardInterrupt:
 	        	sys.exit() 
 
