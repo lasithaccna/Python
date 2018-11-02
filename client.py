@@ -17,7 +17,7 @@ def rec_data():
 			print(server_data)
 		
 		except KeyboardInterrupt:
-			conn.close()
+			sock.close()
 			sys.exit()		
 		else:
 			if not server_data:
@@ -32,7 +32,7 @@ while True:
 		client_input=raw_input()
 		sock.send(client_input)
 	except KeyboardInterrupt:
-		conn.close()
+		sock.close()
 		sys.exit()		
 			
 	

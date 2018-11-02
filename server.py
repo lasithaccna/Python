@@ -4,8 +4,8 @@ from threading import Thread
 sock_s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock_s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-ip=sys.argv[1]
-port=int(sys.argv[2])
+ip=''
+port=int(sys.argv[1])
 
 sock_s.bind((ip, port))
 
@@ -21,7 +21,7 @@ def rec_data():
 			print(client_data)
 		
 		except KeyboardInterrupt:
-			conn.close()
+			sock.close()
 			sys.exit()		
 		else:
 			if not client_data:
@@ -38,7 +38,7 @@ while True:
 		server_input=raw_input()
 		sock.send(server_input)
 	except KeyboardInterrupt:
-		conn.close()
+		sock.close()
 		sys.exit()
 			
 	
