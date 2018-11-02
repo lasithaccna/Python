@@ -10,13 +10,13 @@ def eth_addr (a) :
 try:
     s = socket.socket( socket.AF_PACKET , socket.SOCK_RAW , socket.ntohs(0x0800))
 except socket.error , msg:
-    print 'Socket could not be created. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
+    print 'Socket could not be created'
     sys.exit()
- 
+packet_number=1 
 # receive a packet
 while True:
 
-
+    print "\nPacket Number"+str(packet_number)
     try:
         receive_packet = s.recvfrom(65565)
         packet = receive_packet[0] 
@@ -29,9 +29,9 @@ while True:
     ethernet_protocol = socket.ntohs(ethernet_unpack[2])
     ethernet_src=eth_addr(packet[6:12])
     ethernet_dst=eth_addr(packet[0:6])
-    print "Ethernet Header Is \n ---------------------------------------------------------------------------------------------------------"
-    print 'Destination MAC : ' + ethernet_dst + ' Source MAC : ' + ethernet_src + ' Protocol : ' + str(ethernet_protocol)
-    print "---------------------------------------------------------------------------------------------------------"
+    print "Ethernet Header Is \n"
+    print 'Destination MAC : ' + ethernet_dst + '\nSource MAC : ' + ethernet_src + '\nProtocol : ' + str(ethernet_protocol)
+    
     
 
 
@@ -48,9 +48,9 @@ while True:
         protocol = ip_header_unpack[6]
         src_addr = socket.inet_ntoa(ip_header_unpack[8]);
         dst_addr = socket.inet_ntoa(ip_header_unpack[9]);
-        print "This Is an IP Packet \n Ip Header Is  \n ---------------------------------------------------------------------------------------------------------"
-        print 'Version : ' + str(version) + ' IP Header Length : ' + str(ihl) + ' TTL : ' + str(ttl) + ' Protocol : ' + str(protocol) + ' Source Address : ' + str(src_addr) + ' Destination Address : ' + str(dst_addr)
-        print "---------------------------------------------------------------------------------------------------------"
+        print "\nThis Is an IP Packet \n"
+        print 'Version : ' + str(version) + '\nIP Header Length : ' + str(ihl) + '\nTTL : ' + str(ttl) + '\nProtocol : ' + str(protocol) + '\nSource Address : ' + str(src_addr) + '\nDestination Address : ' + str(dst_addr)
+        
 
 
 
@@ -64,9 +64,9 @@ while True:
             sequence = tcp_header_unpack[2]
             acknowledgement = tcp_header_unpack[3]            
             tcph_length = tcp_header_unpack[4] >> 4
-            print "TCP Header Is  \n ---------------------------------------------------------------------------------------------------------" 
-            print 'Source Port : ' + str(source_port) + ' Dest Port : ' + str(dest_port) + ' Sequence Number : ' + str(sequence) + ' Acknowledgement : ' + str(acknowledgement) + ' TCP header length : ' + str(tcph_length)
-            print "---------------------------------------------------------------------------------------------------------"
+            print "\nTCP Header Is \n" 
+            print 'Source Port : ' + str(source_port) + '\nDest Port : ' + str(dest_port) + '\nSequence Number : ' + str(sequence) + '\nAcknowledgement : ' + str(acknowledgement) + '\nTCP header length : ' + str(tcph_length)
+            
             h_size = 14 + iph_length + tcph_length * 4
             data_size = len(packet) - h_size 
             data = packet[h_size:]             
@@ -84,9 +84,9 @@ while True:
             icmp_type = icmp_header_unpack[0]
             code = icmp_header_unpack[1]
             checksum = icmp_header_unpack[2]
-            print "ICMP Header Is  \n ---------------------------------------------------------------------------------------------------------"  
-            print 'Type : ' + str(icmp_type) + ' Code : ' + str(code) + ' Checksum : ' + str(checksum)
-            print "---------------------------------------------------------------------------------------------------------"  
+            print "\nICMP Header Is  \n"  
+            print 'Type : ' + str(icmp_type) + '\nCode : ' + str(code) + '\nChecksum : ' + str(checksum)
+              
             h_size = 14 + iph_length + icmph_length
             data_size = len(packet) - h_size             
             data = packet[h_size:]             
@@ -105,9 +105,9 @@ while True:
             dest_port = udph[1]
             length = udph[2]
             checksum = udph[3]
-            print "UDP Header Is  \n ---------------------------------------------------------------------------------------------------------"  
-            print 'Source Port : ' + str(source_port) + ' Dest Port : ' + str(dest_port) + ' Length : ' + str(length) + ' Checksum : ' + str(checksum)
-            print "---------------------------------------------------------------------------------------------------------"  
+            print "\nUDP Header Is  \n"  
+            print 'Source Port : ' + str(source_port) + '\nDest Port : ' + str(dest_port) + '\nLength : ' + str(length) + '\nChecksum : ' + str(checksum)
+              
             h_size = 14 + iph_length + udph_length
             data_size = len(packet) - h_size 
             data = packet[h_size:]             
@@ -117,3 +117,4 @@ while True:
         #some other IP packet like IGMP
         else :
             print 'Protocol other than TCP/UDP/ICMP'
+	packet_number+=1
